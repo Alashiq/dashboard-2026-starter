@@ -1,0 +1,353 @@
+<div class="w-auto md:p-8 p-4">
+    <!-- Inside Page -->
+    <div class="w-full md:px-4 px-0 pb-8 pt-2 bg-white shadow-2 rounded-lg text-lg text-gray-600 font-medium"
+        v-if="loaded==200">
+
+        <!-- Table Header -->
+        <Single-Page-Header title="بيانات القاعة" url="/admin/hall/" urlLabel="قائمة القاعات"></Single-Page-Header>
+        <!-- End Table Header -->
+
+        <!-- Grid -->
+        <div class="grid lg:grid-cols-2 md:grid-cols-2 JF-Flat">
+
+            <!-- صورة القاعة -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">شعار القاعة</div>
+                <div class="h-48 rounded border border-gray-200 bg-gray-50 flex items-center justify-center">
+                    <img v-if="mainItem.logo" :src="mainItem.logo" alt="hall logo" class="h-full object-cover rounded">
+                    <span v-else class="text-gray-400">لا توجد صورة</span>
+                </div>
+            </div>
+
+            <!-- اسم القاعة -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">اسم القاعة</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.name }}
+                </div>
+            </div>
+
+            <!-- المدينة -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">المدينة</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.city.name }}
+                </div>
+            </div>
+
+            <!-- العنوان -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">العنوان</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.address }}
+                </div>
+            </div>
+
+            <!-- الهاتف -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">الهاتف</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.phone }}
+                </div>
+            </div>
+
+            <!-- واتساب -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">واتساب</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.whatsapp }}
+                </div>
+            </div>
+
+            <!-- هاتف المشرف -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">هاتف المشرف</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.supervisor_phone }}
+                </div>
+            </div>
+
+            <!-- السعة والطاولات والكراسي -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">عدد الطاولات</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.tables }}
+                </div>
+            </div>
+
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">عدد الكراسي</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.chairs }}
+                </div>
+            </div>
+
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">القدرة الاستيعابية</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.capacity }}
+                </div>
+            </div>
+
+            <!-- الأسعار -->
+            <div class="w-full px-4 py-4" v-if="mainItem.price_morning">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">سعر الفترة الصباحية</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.price_morning }} دينار
+                </div>
+            </div>
+
+            <div class="w-full px-4 py-4" v-if="mainItem.price_evening">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">سعر الفترة المسائية</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.price_evening }} دينار
+                </div>
+            </div>
+
+            <div class="w-full px-4 py-4" v-if="mainItem.price_full_day">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">سعر اليوم الكامل</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.price_full_day }} دينار
+                </div>
+            </div>
+
+            <!-- الخدمات -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">الخدمات المتوفرة</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.services_text }}
+                </div>
+            </div>
+
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">تكييف</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.air_conditioning ? 'متوفر' : 'غير متوفر' }}
+                </div>
+            </div>
+
+            <!-- إيداع وسياسة الإلغاء -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">الإيداع</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.deposit }} دينار
+                </div>
+            </div>
+
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">سياسة الإلغاء</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.cancellation_policy }}
+                </div>
+            </div>
+
+            <!-- موقع القاعة -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">خطوط العرض</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.latitude }}
+                </div>
+            </div>
+
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">خطوط الطول</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.longitude }}
+                </div>
+            </div>
+
+            <!-- الحالة -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">الحالة</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.status == 1 ? 'نشطة' : 'غير نشطة' }}
+                </div>
+            </div>
+
+            <!-- الوصف -->
+            <div class="w-full px-4 py-4">
+                <div class="min-h-9 flex items-center text-gray-500 mr-2 text-sm">الوصف</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.description }}
+                </div>
+            </div>
+
+            <!-- المدة النهائية للدفع -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">المدة النهائية لدفع كامل القيمة</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.final_payment_days }} يوم قبل الموعد
+                </div>
+            </div>
+
+
+            <!-- الخدمات البوليانية -->
+        
+            
+            <!-- التكييف -->
+<div class="w-full px-4 py-4">
+  <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">التكييف</div>
+  <div class="h-12 flex items-center">
+    <span
+      :class="mainItem.air_conditioning 
+        ? 'bg-green-100 text-green-700 border border-green-300' 
+        : 'bg-red-100 text-red-700 border border-red-300'"
+      class="px-4 py-1 rounded-full text-sm font-medium"
+    >
+      {{ mainItem.air_conditioning ? 'متوفر' : 'غير متوفر' }}
+    </span>
+  </div>
+</div>
+
+<!-- البوفيه -->
+<div class="w-full px-4 py-4">
+  <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">البوفيه</div>
+  <div class="h-12 flex items-center">
+    <span
+      :class="mainItem.buffet 
+        ? 'bg-green-100 text-green-700 border border-green-300' 
+        : 'bg-red-100 text-red-700 border border-red-300'"
+      class="px-4 py-1 rounded-full text-sm font-medium"
+    >
+      {{ mainItem.buffet ? 'متوفر' : 'غير متوفر' }}
+    </span>
+  </div>
+</div>
+
+<!-- المشروبات -->
+<div class="w-full px-4 py-4">
+  <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">المشروبات</div>
+  <div class="h-12 flex items-center">
+    <span
+      :class="mainItem.drinks 
+        ? 'bg-green-100 text-green-700 border border-green-300' 
+        : 'bg-red-100 text-red-700 border border-red-300'"
+      class="px-4 py-1 rounded-full text-sm font-medium"
+    >
+      {{ mainItem.drinks ? 'متوفر' : 'غير متوفر' }}
+    </span>
+  </div>
+</div>
+
+<!-- الكوشة -->
+<div class="w-full px-4 py-4">
+  <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">الكوشة</div>
+  <div class="h-12 flex items-center">
+    <span
+      :class="mainItem.stage 
+        ? 'bg-green-100 text-green-700 border border-green-300' 
+        : 'bg-red-100 text-red-700 border border-red-300'"
+      class="px-4 py-1 rounded-full text-sm font-medium"
+    >
+      {{ mainItem.stage ? 'متوفرة' : 'غير متوفرة' }}
+    </span>
+  </div>
+</div>
+
+<!-- الإضاءة -->
+<div class="w-full px-4 py-4">
+  <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">الإضاءة</div>
+  <div class="h-12 flex items-center">
+    <span
+      :class="mainItem.lighting 
+        ? 'bg-green-100 text-green-700 border border-green-300' 
+        : 'bg-red-100 text-red-700 border border-red-300'"
+      class="px-4 py-1 rounded-full text-sm font-medium"
+    >
+      {{ mainItem.lighting ? 'متوفرة' : 'غير متوفرة' }}
+    </span>
+  </div>
+</div>
+
+<!-- الميكروفون -->
+<div class="w-full px-4 py-4">
+  <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">الميكروفون</div>
+  <div class="h-12 flex items-center">
+    <span
+      :class="mainItem.microphone 
+        ? 'bg-green-100 text-green-700 border border-green-300' 
+        : 'bg-red-100 text-red-700 border border-red-300'"
+      class="px-4 py-1 rounded-full text-sm font-medium"
+    >
+      {{ mainItem.microphone ? 'متوفر' : 'غير متوفر' }}
+    </span>
+  </div>
+</div>
+
+<!-- الدي جي -->
+<div class="w-full px-4 py-4">
+  <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">الدي جي</div>
+  <div class="h-12 flex items-center">
+    <span
+      :class="mainItem.dj 
+        ? 'bg-green-100 text-green-700 border border-green-300' 
+        : 'bg-red-100 text-red-700 border border-red-300'"
+      class="px-4 py-1 rounded-full text-sm font-medium"
+    >
+      {{ mainItem.dj ? 'متوفر' : 'غير متوفر' }}
+    </span>
+  </div>
+</div>
+
+<!-- التصوير -->
+<div class="w-full px-4 py-4">
+  <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">التصوير</div>
+  <div class="h-12 flex items-center">
+    <span
+      :class="mainItem.photography 
+        ? 'bg-green-100 text-green-700 border border-green-300' 
+        : 'bg-red-100 text-red-700 border border-red-300'"
+      class="px-4 py-1 rounded-full text-sm font-medium"
+    >
+      {{ mainItem.photography ? 'متوفر' : 'غير متوفر' }}
+    </span>
+  </div>
+</div>
+
+
+
+
+        </div>
+        <!-- End Grid -->
+
+        <div class="w-full lg:h-20 mt-12 lg:flex items-center justify-start text-sm cairo">
+
+            <!-- زر تعديل القاعة -->
+            <router-link v-show="$parent.$parent.checkPermission('EditHall')"
+                :to="'/admin/hall/' + $route.params.id + '/edit'"
+                class="h-12 px-6 mx-2 bg-gray-400 hover:bg-gray-500 flex items-center justify-center text-white shadow-lg rounded cursor-pointer">
+                <i class="fas fa-edit ml-2"></i>
+                تعديل القاعة
+            </router-link>
+
+            <!-- زر حذف القاعة -->
+            <div v-show="$parent.$parent.checkPermission('DeleteHall')" @click="deleteHall"
+                class="h-12 px-6 mx-2 bg-red-400 hover:bg-red-500 flex items-center justify-center text-white shadow-lg rounded cursor-pointer">
+                <i class="far fa-trash-alt ml-2"></i>
+                حذف القاعة
+            </div>
+
+            <!-- زر تفعيل القاعة -->
+            <div v-show="$parent.$parent.checkPermission('ActiveHall') && mainItem.status == 0" @click="activateHall"
+                class="h-12 px-6 mx-2 bg-green-500 hover:bg-green-600 flex items-center justify-center text-white shadow-lg rounded cursor-pointer">
+                <i class="fas fa-check ml-2"></i>
+                تفعيل القاعة
+            </div>
+
+            <!-- زر إلغاء تفعيل القاعة -->
+            <div v-show="$parent.$parent.checkPermission('DisActiveHall') && mainItem.status == 1"
+                @click="deactivateHall"
+                class="h-12 px-6 mx-2 bg-yellow-500 hover:bg-yellow-600 flex items-center justify-center text-white shadow-lg rounded cursor-pointer">
+                <i class="fas fa-times ml-2"></i>
+                إلغاء التفعيل
+            </div>
+
+        </div>
+
+    </div>
+
+    <Empty-Box v-if="loaded == 204" message="لا توجد قاعة بهذا الرقم"></Empty-Box>
+    <Bad-Request v-if="loaded==400" :reload="reload" :message="errorMessage"></Bad-Request>
+    <No-Permission v-if="loaded==403" :message="errorMessage"></No-Permission>
+    <No-Internet v-if="loaded==404" :reload="reload"></No-Internet>
+</div>

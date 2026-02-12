@@ -1,0 +1,75 @@
+<div class="w-auto md:p-8 p-4">
+    <!-- Inside Page -->
+    <div v-if="loaded == 200"
+        class="w-full md:px-4 px-0 pb-8 pt-2 bg-white shadow-2 rounded-lg text-lg text-gray-600 font-medium">
+
+        <!-- Table Header -->
+        <Single-Page-Header title="أضف مستخدم" url="/admin/user" urlLabel="قائمة المستخدمين"></Single-Page-Header>
+        <!-- End Table Header -->
+
+        <!-- Grid Form -->
+        <div class="grid lg:grid-cols-2 gap-6 mt-4">
+
+            <!-- الاسم الأول -->
+            <div>
+                <label class="block mb-1 text-gray-500">الاسم الأول</label>
+                <input v-model="formData.first_name" @change="validateFirstName"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.first_name }}</div>
+            </div>
+
+            <!-- الاسم الأخير -->
+            <div>
+                <label class="block mb-1 text-gray-500">الاسم الأخير</label>
+                <input v-model="formData.last_name" @change="validateLastName"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.last_name }}</div>
+            </div>
+
+            <!-- رقم الهاتف -->
+            <div>
+                <label class="block mb-1 text-gray-500">رقم الهاتف</label>
+                <input v-model="formData.phone" @change="validatePhone"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.phone }}</div>
+            </div>
+
+            <!-- المدينة -->
+            <div>
+                <label class="block mb-1 text-gray-500">المدينة</label>
+                <select v-model="formData.city_id" @change="validateCity"
+                        class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base">
+                    <option value="">اختر المدينة</option>
+                    <option v-for="city in cityList" :key="city.id" :value="city.id">{{ city.name }}</option>
+                </select>
+                <div class="h-6 text-sm text-red-400">{{ formValidate.city_id }}</div>
+            </div>
+
+            <!-- النقاط -->
+            <div>
+                <label class="block mb-1 text-gray-500">النقاط</label>
+                <input type="number" v-model="formData.point"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+            </div>
+
+            <!-- الرصيد -->
+            <div>
+                <label class="block mb-1 text-gray-500">الرصيد</label>
+                <input type="number" step="0.01" v-model="formData.balance"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+            </div>
+
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mt-8 flex justify-center">
+            <Btn-Submit-New-Item @click="addNewUser" :loading="false" label="أضف المستخدم"></Btn-Submit-New-Item>
+        </div>
+
+    </div>
+
+    <Empty-Box v-if="loaded==204"></Empty-Box>
+    <Bad-Request v-if="loaded==400" :reload="reload" :message="errorMessage"></Bad-Request>
+    <No-Permission v-if="loaded==403" :message="errorMessage"></No-Permission>
+    <No-Internet v-if="loaded==404" :reload="reload"></No-Internet>
+</div>

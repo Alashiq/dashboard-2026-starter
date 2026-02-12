@@ -1,0 +1,289 @@
+<div class="w-auto md:p-8 p-4">
+    <!-- Inside Page -->
+    <div v-if="loaded == 200"
+        class="w-full md:px-4 px-0 pb-8 pt-2 bg-white shadow-2 rounded-lg text-lg text-gray-600 font-medium">
+
+        <!-- Table Header -->
+        <Single-Page-Header title="أضف قاعة" url="/halls/" urlLabel="قائمة القاعات"></Single-Page-Header>
+        <!-- End Table Header -->
+
+        <!-- Grid Form -->
+        <div class="grid lg:grid-cols-2 gap-6 mt-4">
+
+            <!-- اسم القاعة -->
+            <div>
+                <label class="block mb-1 text-gray-500">اسم القاعة</label>
+                <input v-model="formData.name" @change="validateName"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.name }}</div>
+            </div>
+
+            <!-- المدينة -->
+            <div>
+                <label class="block mb-1 text-gray-500">المدينة</label>
+                <select v-model="formData.city_id" @change="validateCity"
+                        class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base">
+                    <option value="">اختر المدينة</option>
+                    <option v-for="city in cityList" :key="city.id" :value="city.id">{{ city.name }}</option>
+                </select>
+                <div class="h-6 text-sm text-red-400">{{ formValidate.city_id }}</div>
+            </div>
+
+            <!-- العنوان -->
+            <div>
+                <label class="block mb-1 text-gray-500">العنوان</label>
+                <input v-model="formData.address" @change="validateAddress"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.address }}</div>
+            </div>
+
+            <!-- رقم الهاتف -->
+            <div>
+                <label class="block mb-1 text-gray-500">رقم الهاتف</label>
+                <input v-model="formData.phone" @change="validatePhone"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.phone }}</div>
+            </div>
+
+            <!-- WhatsApp -->
+            <div>
+                <label class="block mb-1 text-gray-500">رقم WhatsApp</label>
+                <input v-model="formData.whatsapp" @change="validateWhatsapp"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.whatsapp }}</div>
+            </div>
+
+            <!-- رقم المشرف -->
+            <div>
+                <label class="block mb-1 text-gray-500">رقم المشرف</label>
+                <input v-model="formData.supervisor_phone" @change="validateSupervisor"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.supervisor_phone }}</div>
+            </div>
+
+            <!-- وصف القاعة -->
+            <div class="lg:col-span-2">
+                <label class="block mb-1 text-gray-500">الوصف</label>
+                <textarea v-model="formData.description" @change="validateDescription"
+                          class="h-24 w-full rounded border border-gray-200 bg-gray-50 px-4 py-2 text-base"></textarea>
+                <div class="h-6 text-sm text-red-400">{{ formValidate.description }}</div>
+            </div>
+
+            <!-- عدد الطاولات -->
+            <div>
+                <label class="block mb-1 text-gray-500">عدد الطاولات</label>
+                <input type="number" v-model="formData.tables" @change="validateTables"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.tables }}</div>
+            </div>
+
+            <!-- عدد الكراسي -->
+            <div>
+                <label class="block mb-1 text-gray-500">عدد الكراسي</label>
+                <input type="number" v-model="formData.chairs" @change="validateChairs"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.chairs }}</div>
+            </div>
+
+            <!-- السعة -->
+            <div>
+                <label class="block mb-1 text-gray-500">السعة</label>
+                <input type="number" v-model="formData.capacity" @change="validateCapacity"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.capacity }}</div>
+            </div>
+
+            <!-- السعر صباحي -->
+            <div>
+                <label class="block mb-1 text-gray-500">السعر صباحي</label>
+                <input type="number" v-model="formData.price_morning" @change="validatePriceMorning"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.price_morning }}</div>
+            </div>
+
+            <!-- السعر مسائي -->
+            <div>
+                <label class="block mb-1 text-gray-500">السعر مسائي</label>
+                <input type="number" v-model="formData.price_evening" @change="validatePriceEvening"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.price_evening }}</div>
+            </div>
+
+            <!-- السعر يوم كامل -->
+            <div>
+                <label class="block mb-1 text-gray-500">السعر يوم كامل</label>
+                <input type="number" v-model="formData.price_full_day" @change="validatePriceFullDay"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.price_full_day }}</div>
+            </div>
+
+            <!-- خدمات إضافية -->
+            <div class="lg:col-span-2">
+                <label class="block mb-1 text-gray-500">خدمات إضافية (نص)</label>
+                <textarea v-model="formData.services_text" @change="validateServices"
+                          class="h-20 w-full rounded border border-gray-200 bg-gray-50 px-4 py-2 text-base"></textarea>
+                <div class="h-6 text-sm text-red-400">{{ formValidate.services_text }}</div>
+            </div>
+
+            <!-- خطوط الطول والعرض -->
+<div>
+    <label class="block mb-1 text-gray-500">خط العرض (Latitude)</label>
+    <input type="text" v-model="formData.latitude" 
+           class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+</div>
+
+<div>
+    <label class="block mb-1 text-gray-500">خط الطول (Longitude)</label>
+    <input type="text" v-model="formData.longitude" 
+           class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+</div>
+
+
+<!-- خيارات القاعة (Toggle Switches) -->
+<div class="lg:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="flex items-center">
+        <label class="flex items-center cursor-pointer">
+            <div class="relative">
+                <input type="checkbox" v-model="formData.drinks_service" class="sr-only">
+                <div class="w-11 h-6 bg-gray-300 rounded-full shadow-inner"></div>
+                <div class="dot absolute left-0 top-0 w-6 h-6 bg-white rounded-full shadow -mt-0.5 transition"></div>
+            </div>
+            <span class="ml-3 text-gray-700">مشروبات</span>
+        </label>
+    </div>
+
+    <div class="flex items-center">
+        <label class="flex items-center cursor-pointer">
+            <div class="relative">
+                <input type="checkbox" v-model="formData.buffet" class="sr-only">
+                <div class="w-11 h-6 bg-gray-300 rounded-full shadow-inner"></div>
+                <div class="dot absolute left-0 top-0 w-6 h-6 bg-white rounded-full shadow -mt-0.5 transition"></div>
+            </div>
+            <span class="ml-3 text-gray-700">بوفيه</span>
+        </label>
+    </div>
+
+    <div class="flex items-center">
+        <label class="flex items-center cursor-pointer">
+            <div class="relative">
+                <input type="checkbox" v-model="formData.decoration" class="sr-only">
+                <div class="w-11 h-6 bg-gray-300 rounded-full shadow-inner"></div>
+                <div class="dot absolute left-0 top-0 w-6 h-6 bg-white rounded-full shadow -mt-0.5 transition"></div>
+            </div>
+            <span class="ml-3 text-gray-700">ديكور</span>
+        </label>
+    </div>
+
+    <div class="flex items-center">
+        <label class="flex items-center cursor-pointer">
+            <div class="relative">
+                <input type="checkbox" v-model="formData.sound_system" class="sr-only">
+                <div class="w-11 h-6 bg-gray-300 rounded-full shadow-inner"></div>
+                <div class="dot absolute left-0 top-0 w-6 h-6 bg-white rounded-full shadow -mt-0.5 transition"></div>
+            </div>
+            <span class="ml-3 text-gray-700">نظام صوت</span>
+        </label>
+    </div>
+
+    <div class="flex items-center">
+        <label class="flex items-center cursor-pointer">
+            <div class="relative">
+                <input type="checkbox" v-model="formData.bride_room" class="sr-only">
+                <div class="w-11 h-6 bg-gray-300 rounded-full shadow-inner"></div>
+                <div class="dot absolute left-0 top-0 w-6 h-6 bg-white rounded-full shadow -mt-0.5 transition"></div>
+            </div>
+            <span class="ml-3 text-gray-700">غرفة العروس</span>
+        </label>
+    </div>
+
+    <div class="flex items-center">
+        <label class="flex items-center cursor-pointer">
+            <div class="relative">
+                <input type="checkbox" v-model="formData.photography" class="sr-only">
+                <div class="w-11 h-6 bg-gray-300 rounded-full shadow-inner"></div>
+                <div class="dot absolute left-0 top-0 w-6 h-6 bg-white rounded-full shadow -mt-0.5 transition"></div>
+            </div>
+            <span class="ml-3 text-gray-700">تصوير</span>
+        </label>
+    </div>
+
+    <div class="flex items-center">
+        <label class="flex items-center cursor-pointer">
+            <div class="relative">
+                <input type="checkbox" v-model="formData.parking" class="sr-only">
+                <div class="w-11 h-6 bg-gray-300 rounded-full shadow-inner"></div>
+                <div class="dot absolute left-0 top-0 w-6 h-6 bg-white rounded-full shadow -mt-0.5 transition"></div>
+            </div>
+            <span class="ml-3 text-gray-700">مواقف</span>
+        </label>
+    </div>
+
+    <div class="flex items-center">
+        <label class="flex items-center cursor-pointer">
+            <div class="relative">
+                <input type="checkbox" v-model="formData.air_conditioning" class="sr-only">
+                <div class="w-11 h-6 bg-gray-300 rounded-full shadow-inner"></div>
+                <div class="dot absolute left-0 top-0 w-6 h-6 bg-white rounded-full shadow -mt-0.5 transition"></div>
+            </div>
+            <span class="ml-3 text-gray-700">تكييف</span>
+        </label>
+    </div>
+</div>
+
+
+            <!-- العربون -->
+            <div>
+                <label class="block mb-1 text-gray-500">العربون</label>
+                <input type="number" v-model="formData.deposit" @change="validateDeposit"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.deposit }}</div>
+            </div>
+
+            <!-- سياسة الإلغاء -->
+            <div class="lg:col-span-2">
+                <label class="block mb-1 text-gray-500">سياسة الإلغاء</label>
+                <textarea v-model="formData.cancellation_policy" @change="validateCancellationPolicy"
+                          class="h-20 w-full rounded border border-gray-200 bg-gray-50 px-4 py-2 text-base"></textarea>
+                <div class="h-6 text-sm text-red-400">{{ formValidate.cancellation_policy }}</div>
+            </div>
+
+            <!-- أيام الدفع النهائي -->
+            <div>
+                <label class="block mb-1 text-gray-500">أيام الدفع النهائي</label>
+                <input type="number" v-model="formData.final_payment_days" @change="validateFinalPaymentDays"
+                       class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base" />
+                <div class="h-6 text-sm text-red-400">{{ formValidate.final_payment_days }}</div>
+            </div>
+
+            <!-- رفع اللوغو -->
+            <div class="lg:col-span-2 mt-4">
+                <label class="block mb-1 text-gray-500">شعار القاعة</label>
+                <div class="flex items-center gap-4">
+                    <div class="border h-52 w-52 flex items-center justify-center">
+                        <img v-if="previewImage" :src="previewImage" class="h-52 w-52" />
+                        <span v-else>لا يوجد صورة</span>
+                    </div>
+                    <div class="relative h-16 w-32 cursor-pointer">
+                        <input type="file" @change="onChangeLogo" class="absolute inset-0 opacity-0 cursor-pointer" />
+                        <div class="bg-blue-400 h-16 w-32 text-white flex items-center justify-center rounded shadow hover:bg-blue-500">
+                            اختر الصورة
+                        </div>
+                    </div>
+                </div>
+                <div class="h-6 text-sm text-red-400 mt-2">{{ formValidate.file }}</div>
+            </div>
+
+        </div>
+        <!-- End Grid Form -->
+
+        <!-- Action Part -->
+        <div class="flex items-center h-20 mt-6">
+            <Btn-Submit-New-Item label="إضافة القاعة" :submit="addNewHall"></Btn-Submit-New-Item>
+        </div>
+    </div>
+
+    <Empty-Box v-if="loaded == 204" message="لم نتمكن من جلب المدن"></Empty-Box>
+    <Bad-Request v-if="loaded==400" :reload="reload" :message="errorMessage"></Bad-Request>
+    <No-Permission v-if="loaded==403" :message="errorMessage"></No-Permission>
+    <No-Internet v-if="loaded==404" :reload="reload"></No-Internet>
+</div>

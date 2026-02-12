@@ -1,0 +1,241 @@
+<div class="w-auto md:p-8 p-4">
+    <!-- Inside Page -->
+    <div class="w-full md:px-4 px-0 pb-8 pt-2 bg-white shadow-2 rounded-lg text-lg text-gray-600 font-medium" v-if="loaded==200">
+
+        <!-- Table Header -->
+        <Single-Page-Header :title="'بيانات متعهد التموين: ' + mainItem.name" url="/admin/caterer" urlLabel="قائمة متعهدي التموين"></Single-Page-Header>
+        <!-- End Table Header -->
+
+        <!-- Grid for all caterer details -->
+        <div class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 JF-Flat mt-8">
+
+            <!-- =================== البيانات الأساسية =================== -->
+            <div class="lg:col-span-3 md:col-span-2 sm:col-span-1 text-xl cairo font-semibold border-b pb-2 mb-2">
+                البيانات الأساسية
+            </div>
+
+            <!-- اسم التشاركية -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">الاسم التجاري</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.name || 'غير متوفر' }}
+                </div>
+            </div>
+
+            <!-- المدينة -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">المدينة</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.city ? mainItem.city.name : 'غير متوفر' }}
+                </div>
+            </div>
+
+            <!-- الحالة -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">حالة الحساب</div>
+                <div class="h-12 flex items-center">
+                    <span :class="mainItem.status == 1 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+                          class="px-4 py-1 rounded-full text-sm font-medium">
+                        {{ mainItem.status == 1 ? 'نشط' : 'غير نشط' }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- شعار التشاركية -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">الشعار (Logo)</div>
+                <div class="h-48 rounded border border-gray-200 bg-gray-50 flex items-center justify-center">
+                    <img v-if="mainItem.logo" :src="mainItem.logo" alt="caterer logo" class="h-full object-contain rounded p-2">
+                    <span v-else class="text-gray-400">لا يوجد شعار</span>
+                </div>
+            </div>
+
+            <!-- صورة الغلاف -->
+            <div class="w-full px-2 lg:col-span-2 md:col-span-1">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">صورة الغلاف</div>
+                <div class="h-48 rounded border border-gray-200 bg-gray-50 flex items-center justify-center">
+                    <img v-if="mainItem.cover_photo" :src="mainItem.cover_photo" alt="caterer cover" class="h-full w-full object-cover rounded">
+                    <span v-else class="text-gray-400">لا توجد صورة غلاف</span>
+                </div>
+            </div>
+
+            <!-- الوصف -->
+            <div class="w-full px-2 lg:col-span-3 md:col-span-2">
+                <div class="min-h-9 flex items-center text-gray-500 mr-2 text-sm">نبذة تعريفية (الوصف)</div>
+                <div class="p-4 rounded border border-gray-200 bg-gray-50 text-base min-h-[80px]">
+                    {{ mainItem.description || 'غير متوفر' }}
+                </div>
+            </div>
+
+            <!-- =================== بيانات التواصل والموقع =================== -->
+            <div class="lg:col-span-3 md:col-span-2 sm:col-span-1 text-xl cairo font-semibold border-b pb-2 mt-6 mb-2">
+                بيانات التواصل والموقع
+            </div>
+
+            <!-- العنوان -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">العنوان التفصيلي</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.address || 'غير متوفر' }}
+                </div>
+            </div>
+            <!-- الهاتف -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">رقم الهاتف</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.phone || 'غير متوفر' }}
+                </div>
+            </div>
+            <!-- واتساب -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">رقم واتساب</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.whatsapp || 'غير متوفر' }}
+                </div>
+            </div>
+            <!-- خط العرض -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">خط العرض (Latitude)</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.latitude || 'غير متوفر' }}
+                </div>
+            </div>
+            <!-- خط الطول -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">خط الطول (Longitude)</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.longitude || 'غير متوفر' }}
+                </div>
+            </div>
+
+            <!-- =================== سياسات الحجز والعمل =================== -->
+            <div class="lg:col-span-3 md:col-span-2 sm:col-span-1 text-xl cairo font-semibold border-b pb-2 mt-6 mb-2">
+                سياسات الحجز والعمل
+            </div>
+
+            <!-- أقل عدد أيام للحجز -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">أقل مدة للحجز (يوم)</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.min_booking_days_before != null ? mainItem.min_booking_days_before + ' يوم' : 'غير محدد' }}
+                </div>
+            </div>
+            <!-- الحد الأدنى لقيمة الطلب -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">الحد الأدنى لقيمة الطلب</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.min_order_value != null ? mainItem.min_order_value + ' (عملة محلية)' : 'غير محدد' }}
+                </div>
+            </div>
+            <!-- نسبة العربون -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">نسبة العربون للحجز</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.deposit_percentage != null ? mainItem.deposit_percentage + '%' : 'غير محدد' }}
+                </div>
+            </div>
+            <!-- أقل عدد ضيوف -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">أقل عدد ضيوف</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.min_guests != null ? mainItem.min_guests : 'غير محدد' }}
+                </div>
+            </div>
+            <!-- أقصى عدد ضيوف -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">أقصى عدد ضيوف</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.max_guests != null ? mainItem.max_guests : 'غير محدد' }}
+                </div>
+            </div>
+            <!-- سياسة الإلغاء -->
+            <div class="w-full px-2 lg:col-span-3 md:col-span-2">
+                <div class="min-h-9 flex items-center text-gray-500 mr-2 text-sm">سياسة إلغاء الحجز</div>
+                <div class="p-4 rounded border border-gray-200 bg-gray-50 text-base min-h-[80px]">
+                    {{ mainItem.cancellation_policy || 'غير متوفر' }}
+                </div>
+            </div>
+
+            <!-- =================== سياسات التذوق =================== -->
+            <div class="lg:col-span-3 md:col-span-2 sm:col-span-1 text-xl cairo font-semibold border-b pb-2 mt-6 mb-2">
+                سياسات التذوق
+            </div>
+
+            <!-- هل تقدم جلسات تذوق؟ -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">تقدم جلسات تذوق؟</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    <i :class="mainItem.offers_tasting_sessions ? 'fas fa-check-circle text-green-500' : 'fas fa-times-circle text-red-500'"></i>
+                    <span class="mr-2">{{ mainItem.offers_tasting_sessions ? 'نعم' : 'لا' }}</span>
+                </div>
+            </div>
+            <!-- هل تتيح الحجز عبر التطبيق؟ -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">تتيح حجز تذوق عبر التطبيق؟</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    <i :class="mainItem.offers_tasting_booking ? 'fas fa-check-circle text-green-500' : 'fas fa-times-circle text-red-500'"></i>
+                    <span class="mr-2">{{ mainItem.offers_tasting_booking ? 'نعم' : 'لا' }}</span>
+                </div>
+            </div>
+            <!-- سياسة التذوق -->
+            <div class="w-full px-2 lg:col-span-3 md:col-span-2">
+                <div class="min-h-9 flex items-center text-gray-500 mr-2 text-sm">شرح سياسة التذوق</div>
+                <div class="p-4 rounded border border-gray-200 bg-gray-50 text-base min-h-[80px]">
+                    {{ mainItem.tasting_policy || 'غير متوفر' }}
+                </div>
+            </div>
+
+            <!-- =================== معلومات إضافية =================== -->
+            <div class="lg:col-span-3 md:col-span-2 sm:col-span-1 text-xl cairo font-semibold border-b pb-2 mt-6 mb-2">
+                معلومات إضافية
+            </div>
+
+            <!-- متوسط التقييم -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">متوسط التقييم</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    <i class="fas fa-star text-yellow-400 mr-2"></i> {{ mainItem.average_rating }}
+                </div>
+            </div>
+            <!-- عدد المراجعات -->
+            <div class="w-full px-2">
+                <div class="h-9 flex items-center text-gray-500 mr-2 text-sm">عدد المراجعات</div>
+                <div class="h-12 rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base">
+                    {{ mainItem.reviews_count }}
+                </div>
+            </div>
+
+        </div>
+        <!-- End Grid -->
+
+        <!-- Action Buttons -->
+        <div class="w-full lg:h-20 mt-12 lg:flex items-center justify-start text-sm cairo">
+            <router-link v-show="$parent.$parent.checkPermission('EditCaterer')"
+                :to="'/admin/caterer/' + $route.params.id + '/edit'"
+                class="h-12 px-6 mx-2 my-1 bg-gray-400 hover:bg-gray-500 flex items-center justify-center text-white shadow-lg rounded cursor-pointer">
+                <i class="fas fa-edit ml-2"></i>
+                تعديل البيانات
+            </router-link>
+            <div v-show="$parent.$parent.checkPermission('DeleteCaterer')" @click="deleteCaterer"
+                class="h-12 px-6 mx-2 my-1 bg-red-400 hover:bg-red-500 flex items-center justify-center text-white shadow-lg rounded cursor-pointer">
+                <i class="far fa-trash-alt ml-2"></i>
+                حذف
+            </div>
+            <div v-show="$parent.$parent.checkPermission('ActiveCaterer') && mainItem.status == 0" @click="activateCaterer"
+                class="h-12 px-6 mx-2 my-1 bg-green-500 hover:bg-green-600 flex items-center justify-center text-white shadow-lg rounded cursor-pointer">
+                <i class="fas fa-check ml-2"></i>
+                تفعيل الحساب
+            </div>
+            <div v-show="$parent.$parent.checkPermission('DisActiveCaterer') && mainItem.status == 1" @click="deactivateCaterer"
+                class="h-12 px-6 mx-2 my-1 bg-yellow-500 hover:bg-yellow-600 flex items-center justify-center text-white shadow-lg rounded cursor-pointer">
+                <i class="fas fa-times ml-2"></i>
+                إلغاء تفعيل الحساب
+            </div>
+        </div>
+    </div>
+
+    <Empty-Box v-if="loaded == 204" message="لا يوجد متعهد تموين بهذا الرقم"></Empty-Box>
+    <Bad-Request v-if="loaded==400" :reload="reload" :message="errorMessage"></Bad-Request>
+    <No-Permission v-if="loaded==403" :message="errorMessage"></No-Permission>
+    <No-Internet v-if="loaded==404" :reload="reload"></No-Internet>
+</div>

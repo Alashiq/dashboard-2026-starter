@@ -1,0 +1,82 @@
+<div class="w-auto md:p-8 p-4">
+    <!-- Inside Page -->
+    <div v-if="loaded == 200" class="w-full md:px-4 px-0 pb-8 pt-2 bg-white shadow-2 rounded-lg text-lg text-gray-600 font-medium">
+
+        <!-- Page Header -->
+        <Single-Page-Header :title="'تعديل المنتج: ' + formData.name" url="/admin/product/" urlLabel="قائمة المنتجات"></Single-Page-Header>
+        <!-- End Page Header -->
+
+        <!-- Grid Form -->
+        <div class="grid lg:grid-cols-3 md:grid-cols-1 gap-x-6 mt-8">
+
+            <!-- Left Column: Main Fields -->
+            <div class="lg:col-span-2 grid grid-cols-1 gap-y-4">
+                <!-- اسم المنتج -->
+                <div>
+                    <label class='block h-9 flex items-center text-gray-500 text-sm'>اسم المنتج <span class="text-red-500 mr-1">*</span></label>
+                    <input type='text' v-model='formData.name' class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+                </div>
+
+                <!-- الوصف -->
+                <div>
+                    <label class='block h-9 flex items-center text-gray-500 text-sm'>وصف المنتج</label>
+                    <textarea v-model='formData.description' class='min-h-[120px] py-2 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'></textarea>
+                </div>
+
+                <!-- المكونات -->
+                <div>
+                    <label class='block h-9 flex items-center text-gray-500 text-sm'>المكونات</label>
+                    <textarea v-model='formData.ingredients' class='min-h-[80px] py-2 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'></textarea>
+                </div>
+
+                <!-- كلمات دلالية -->
+                <div>
+                    <label class='block h-9 flex items-center text-gray-500 text-sm'>كلمات دلالية (افصل بينها بفاصلة ,)</label>
+                    <input type='text' v-model='formData.keywords' class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+                </div>
+            </div>
+
+            <!-- Right Column: Photo and Caterer -->
+            <div class="lg:col-span-1 grid grid-cols-1 gap-y-4 mt-4 lg:mt-0">
+                <!-- صورة المنتج -->
+                <div>
+                    <label class='block h-9 flex items-center text-gray-500 text-sm'>تغيير صورة المنتج</label>
+                    <div class="w-full h-56 border-2 border-dashed rounded-lg flex items-center justify-center bg-gray-50 relative">
+                        <!-- عرض الصورة الجديدة المختارة أو الصورة الحالية -->
+                        <img v-if="previewPhoto || formData.photo" :src="previewPhoto || formData.photo" class="h-full w-full object-contain rounded-lg p-2" />
+                        <div v-else class="text-center text-gray-400">
+                            <i class="fas fa-image text-4xl"></i>
+                            <p class="mt-2">اختر صورة جديدة</p>
+                        </div>
+                        <input type="file" @change="onChangePhoto" accept="image/*" ref="photoInput" class='absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer'>
+                    </div>
+                </div>
+
+                <!-- متعهد التموين -->
+                <div>
+                    <label class='block h-9 flex items-center text-gray-500 text-sm'>ربط بمتعهد تموين (اختياري)</label>
+                    <select v-model="formData.caterer_id" class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base">
+                        <option :value="null">-- منتج عام (غير مرتبط) --</option>
+                        <option v-for="caterer in catererList" :key="caterer.id" :value="caterer.id">{{ caterer.name }}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <!-- End Grid Form -->
+
+        <!-- Action Part -->
+        <div class="w-full lg:h-20 mt-8 lg:flex items-center justify-start text-sm cairo">
+            <div @click="updateProduct"
+                class="h-12 px-6 mx-4 my-2 bg-green-500 hover:bg-green-600 flex items-center justify-center text-white shadow-lg rounded cursor-pointer">
+                <i class="fas fa-save ml-2"></i>
+                حفظ التعديلات
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading and Error States -->
+    <Empty-Box v-if="loaded == 204" message="لا يوجد منتج بهذا الرقم"></Empty-Box>
+    <Bad-Request v-if="loaded==400" :reload="reload" :message="errorMessage"></Bad-Request>
+    <No-Permission v-if="loaded==403" :message="errorMessage"></No-Permission>
+    <No-Internet v-if="loaded==404" :reload="reload"></No-Internet>
+</div>

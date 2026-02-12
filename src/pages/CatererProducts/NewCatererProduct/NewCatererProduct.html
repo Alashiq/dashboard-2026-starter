@@ -1,0 +1,65 @@
+<div class="w-auto md:p-8 p-4">
+    <!-- Inside Page -->
+    <div v-if="loaded == 200" class="w-full md:px-4 px-0 pb-8 pt-2 bg-white shadow-2 rounded-lg text-lg text-gray-600 font-medium">
+
+        <!-- Page Header -->
+        <Single-Page-Header title="إضافة منتج لمتعهد" url="/admin/catererproduct/" urlLabel="قائمة منتجات المتعهدين"></Single-Page-Header>
+        <!-- End Page Header -->
+
+        <!-- Form -->
+        <div class="max-w-2xl mx-auto mt-8">
+            
+            <!-- Caterer Selection -->
+            <div class="mb-6">
+                <label class='block h-9 flex items-center text-gray-500 text-sm'>اختر متعهد التموين <span class="text-red-500 mr-1">*</span></label>
+                <select v-model="formData.caterer_id" class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base">
+                    <option :value="null" disabled>-- قائمة متعهدي التموين --</option>
+                    <option v-for="caterer in catererList" :key="caterer.id" :value="caterer.id">{{ caterer.name }}</option>
+                </select>
+            </div>
+
+            <!-- Product Selection -->
+            <div class="mb-6">
+                <label class='block h-9 flex items-center text-gray-500 text-sm'>اختر المنتج <span class="text-red-500 mr-1">*</span></label>
+                <select v-model="formData.product_id" class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base">
+                    <option :value="null" disabled>-- قائمة المنتجات --</option>
+                    <option v-for="product in productList" :key="product.id" :value="product.id">{{ product.name }}</option>
+                </select>
+                <p class="text-xs text-gray-400 mt-1 px-1">ملاحظة: إذا أضفت منتجًا لمتعهد معين من قبل، فلن يظهر في هذه القائمة لتجنب التكرار.</p>
+            </div>
+
+            <!-- Price -->
+            <div class="mb-6">
+                <label class='block h-9 flex items-center text-gray-500 text-sm'>سعر المنتج لدى المتعهد <span class="text-red-500 mr-1">*</span></label>
+                <input type='number' v-model='formData.price' placeholder="مثال: 150.50" class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+            </div>
+
+            <!-- Availability Status -->
+            <div class="mb-6">
+                <label class='block h-9 flex items-center text-gray-500 text-sm mb-2'>حالة التوفر <span class="text-red-500 mr-1">*</span></label>
+                <label for="is_available" class="flex items-center cursor-pointer">
+                    <div class="relative">
+                        <input type="checkbox" id="is_available" class="sr-only" v-model="formData.is_available">
+                        <div class="block w-14 h-8 rounded-full" :class="formData.is_available ? 'bg-green-500' : 'bg-gray-300'"></div>
+                        <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-300 ease-in-out" :class="{ 'translate-x-6': formData.is_available }"></div>
+                    </div>
+                    <div class="ml-3 text-gray-700 text-base">
+                        {{ formData.is_available ? 'متوفر' : 'غير متوفر' }}
+                    </div>
+                </label>
+            </div>
+
+            <!-- Action Part -->
+            <div class="flex items-center h-20 mt-8">
+                <Btn-Submit-New-Item label="إضافة الرابط" :submit="addNewItem"></Btn-Submit-New-Item>
+            </div>
+        </div>
+        <!-- End Form -->
+    </div>
+
+    <!-- Loading and Error States -->
+    <Empty-Box v-if="loaded == 204" message="لم نتمكن من جلب البيانات اللازمة."></Empty-Box>
+    <Bad-Request v-if="loaded==400" :reload="reload" :message="errorMessage"></Bad-Request>
+    <No-Permission v-if="loaded==403" :message="errorMessage"></No-Permission>
+    <No-Internet v-if="loaded==404" :reload="reload"></No-Internet>
+</div>

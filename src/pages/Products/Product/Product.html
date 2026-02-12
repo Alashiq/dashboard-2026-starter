@@ -1,0 +1,121 @@
+<div class="w-auto md:p-8 p-4">
+    <!-- Inside Page -->
+    <div class="w-full md:px-4 px-0 pb-8 pt-2 bg-white shadow-2 rounded-lg text-lg text-gray-600 font-medium" v-if="loaded==200">
+
+        <!-- Page Header -->
+        <Single-Page-Header :title="'بيانات المنتج: ' + mainItem.name" url="/admin/product" urlLabel="قائمة المنتجات"></Single-Page-Header>
+        <!-- End Page Header -->
+
+        <!-- Grid for all product details -->
+        <div class="grid lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-6 JF-Flat mt-8">
+
+            <!-- Left Column: Main Details -->
+            <div class="lg:col-span-2 md:col-span-1">
+                <!-- Card for Basic Info -->
+                <div class="p-4 border rounded-lg bg-gray-50">
+                    <h3 class="text-xl cairo font-semibold border-b pb-2 mb-4">البيانات الأساسية</h3>
+                    
+                    <!-- Name -->
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-500">اسم المنتج</p>
+                        <p class="text-base text-gray-800">{{ mainItem.name || 'غير متوفر' }}</p>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-500">وصف المنتج</p>
+                        <p class="text-base text-gray-800 whitespace-pre-wrap">{{ mainItem.description || 'لا يوجد وصف' }}</p>
+                    </div>
+
+                    <!-- Ingredients -->
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-500">المكونات</p>
+                        <p class="text-base text-gray-800">{{ mainItem.ingredients || 'غير محدد' }}</p>
+                    </div>
+
+                    <!-- Keywords -->
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">كلمات دلالية</p>
+                        <div v-if="mainItem.keywords" class="flex flex-wrap gap-2">
+                            <span v-for="(keyword, i) in mainItem.keywords.split(',')" :key="i"
+                                  class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                                {{ keyword.trim() }}
+                            </span>
+                        </div>
+                        <p v-else class="text-base text-gray-800">لا توجد</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Photo and Meta -->
+            <div class="lg:col-span-1 md:col-span-1">
+                <!-- Card for Photo -->
+                <div class="p-4 border rounded-lg bg-gray-50 mb-6">
+                    <h3 class="text-xl cairo font-semibold border-b pb-2 mb-4">صورة المنتج</h3>
+                    <div class="h-64 flex items-center justify-center">
+                        <img v-if="mainItem.photo" :src="mainItem.photo" alt="product photo" class="max-h-full max-w-full object-contain rounded">
+                        <span v-else class="text-gray-400">لا توجد صورة</span>
+                    </div>
+                </div>
+
+                <!-- Card for Meta Info -->
+                <div class="p-4 border rounded-lg bg-gray-50">
+                    <h3 class="text-xl cairo font-semibold border-b pb-2 mb-4">معلومات إضافية</h3>
+                    
+                    <!-- Status -->
+                    <div class="flex justify-between items-center mb-4">
+                        <p class="text-sm text-gray-500">الحالة</p>
+                        <span :class="mainItem.status == 1 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+                              class="px-4 py-1 rounded-full text-sm font-medium">
+                            {{ mainItem.status == 1 ? 'نشط' : 'غير نشط' }}
+                        </span>
+                    </div>
+
+                    <!-- Caterer -->
+                    <div class="flex justify-between items-center">
+                        <p class="text-sm text-gray-500">متعهد التموين</p>
+                        <div v-if="mainItem.caterer">
+                            <router-link :to="'/admin/caterer/' + mainItem.caterer.id" 
+                                         class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm hover:bg-indigo-200">
+                                {{ mainItem.caterer.name }}
+                            </router-link>
+                        </div>
+                        <span v-else class="text-sm text-gray-500">منتج عام</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Grid -->
+
+        <!-- Action Buttons -->
+        <div class="w-full lg:h-20 mt-12 lg:flex items-center justify-start text-sm cairo">
+            <router-link v-show="$parent.$parent.checkPermission('EditProduct')"
+                :to="'/admin/product/' + $route.params.id + '/edit'"
+                class="h-12 px-6 mx-2 my-1 bg-gray-400 hover:bg-gray-500 flex items-center justify-center text-white shadow-lg rounded cursor-pointer">
+                <i class="fas fa-edit ml-2"></i>
+                تعديل المنتج
+            </router-link>
+            <div v-show="$parent.$parent.checkPermission('DeleteProduct')" @click="deleteProduct"
+                class="h-12 px-6 mx-2 my-1 bg-red-400 hover:bg-red-500 flex items-center justify-center text-white shadow-lg rounded cursor-pointer">
+                <i class="far fa-trash-alt ml-2"></i>
+                حذف المنتج
+            </div>
+            <div v-show="$parent.$parent.checkPermission('ActiveProduct') && mainItem.status == 0" @click="activateProduct"
+                class="h-12 px-6 mx-2 my-1 bg-green-500 hover:bg-green-600 flex items-center justify-center text-white shadow-lg rounded cursor-pointer">
+                <i class="fas fa-check ml-2"></i>
+                تفعيل المنتج
+            </div>
+            <div v-show="$parent.$parent.checkPermission('DisActiveProduct') && mainItem.status == 1" @click="deactivateProduct"
+                class="h-12 px-6 mx-2 my-1 bg-yellow-500 hover:bg-yellow-600 flex items-center justify-center text-white shadow-lg rounded cursor-pointer">
+                <i class="fas fa-times ml-2"></i>
+                إلغاء تفعيل المنتج
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading and Error States -->
+    <Empty-Box v-if="loaded == 204" message="لا يوجد منتج بهذا الرقم"></Empty-Box>
+    <Bad-Request v-if="loaded==400" :reload="reload" :message="errorMessage"></Bad-Request>
+    <No-Permission v-if="loaded==403" :message="errorMessage"></No-Permission>
+    <No-Internet v-if="loaded==404" :reload="reload"></No-Internet>
+</div>

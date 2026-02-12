@@ -1,0 +1,88 @@
+<div class="w-auto md:p-8 p-4">
+    <!-- Inside Page -->
+
+    <div v-if="loaded == 200"
+        class="w-full md:px-4 px-0 pb-8 pt-2 bg-white shadow-2 rounded-lg text-lg text-gray-600 font-medium">
+        <!-- Table Header -->
+        <Single-Page-Header title="أضف مشرف" url="/admin/city/" urlLabel="قائمة المشرفين"></Single-Page-Header>
+        <!-- End Table Header -->
+
+        <!-- Grid -->
+        <div class="bg-blue-600a grid lg:grid-cols-2">
+            <!-- Item -->
+            <div class="w-full px-4 py-4">
+                <div
+                class="h-9 flex JF-Flat items-center text-gray-500 mr-2 text-sm"
+            >
+                إسم المدينة
+            </div>
+                <input v-model="formData.name" v-on:change="validateName"
+                    class="h-12 w-full rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base JF-Flat" />
+                <div class="h-8 JF-Flat text-sm text-red-400 mr-2 flex items-center">
+                    {{ formValidate.name }}
+                </div>
+            </div>
+            <!-- Item -->
+
+            <!-- Item -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 JF-Flat flex items-center text-gray-500 mr-2 text-sm">
+                    خطوط الطول
+                </div>
+                <input v-model="formData.longitude" v-on:change="validateLongitude"
+                class="h-12 w-full rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base JF-Flat" />
+                <div class="h-8 JF-Flat text-sm text-red-400 mr-2 flex items-center">
+                    {{ formValidate.longitude }}
+                </div>
+            </div>
+            <!-- Item -->
+
+            <!-- Item -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 JF-Flat flex items-center text-gray-500 mr-2 text-sm">
+           خطوط العرض
+                </div>
+                <input v-model="formData.latitude" v-on:change="validateLatitude"
+                class="h-12 w-full rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base JF-Flat" />
+                <div class="h-8 JF-Flat text-sm text-red-400 mr-2 flex items-center">
+                    {{ formValidate.latitude }}
+                </div>
+            </div>
+            <!-- Item -->
+
+
+
+
+        </div>
+        <!-- Grid -->
+
+                    <!-- Item -->
+            <div class="w-full px-4 py-4">
+                <div class="h-9 JF-Flat flex items-center text-gray-500 mr-2 text-sm">
+                   وصف المدينة
+                </div>
+                <input v-model="formData.description" v-on:change="validateDescription"
+                class="h-12 w-full rounded border border-gray-200 bg-gray-50 flex items-center px-4 text-base JF-Flat" />
+                <div class="h-8 JF-Flat text-sm text-red-400 mr-2 flex items-center">
+                    {{ formValidate.description }}
+                </div>
+            </div>
+            <!-- Item -->
+
+        <!-- Action Part -->
+        <div class="flex items-center h-20 mx-4">
+            <Btn-Submit-New-Item label="إضافة" :submit="addNewItem"></Btn-Submit-New-Item>
+        </div>
+        <!-- End Action Part -->
+    </div>
+
+    <Empty-Box v-if="loaded == 204"
+        message="لم نتمكن من جلب بيانات الأدوار, تأكد من أنك تمتلك صلاحية مشاهدة أدوار الصفحة"></Empty-Box>
+
+        <Bad-Request v-if="loaded==400" :reload="reload" :message="errorMessage"></Bad-Request>
+        <No-Permission v-if="loaded==403" :message="errorMessage"></No-Permission>
+        <No-Internet v-if="loaded==404" :reload="reload"></No-Internet>
+
+
+    <!-- End Inside Page -->
+</div>

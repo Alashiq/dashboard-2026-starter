@@ -1,0 +1,78 @@
+<div class="w-auto md:p-8 p-4" id="0" @click="openOptions($event)">
+    <!-- List Header -->
+    <div class="flex justify-between w-full h-16 items-center">
+        <div class="text-2xl font-semibold cairo text-gray-600">قائمة منتجات المتعهدين</div>
+        <router-link v-show="$parent.$parent.checkPermission('CreateCatererProduct')" to="/admin/catererproduct/new"
+            class="rounded px-4 flex items-center cairo font-medium add-btn">
+            <span class="h-12 flex items-center">
+                <i class="fas fa-plus text-lg"></i>
+                <div class="w-3"></div>
+                <p class="md:block hidden text-base JF-Flat">إضافة منتج لمتعهد</p>
+            </span>
+        </router-link>
+    </div>
+
+    <!-- Search -->
+    <div class="flex flex-wrap pb-5 px-4 bg-white border rounded mt-4">
+        <div class="xl:w-1/4 lg:w-1/3 md:w-1/2 w-full px-2 mt-4">
+            <label class="text-gray-400 text-sm cairo">اسم المنتج</label>
+            <input type="text" v-model="productNameSrh" class="w-full h-12 border border-gray-300 rounded px-4">
+        </div>
+        <div class="xl:w-1/4 lg:w-1/3 md:w-1/2 w-full px-2 mt-4">
+            <label class="text-gray-400 text-sm cairo">اسم المتعهد</label>
+            <input type="text" v-model="catererNameSrh" class="w-full h-12 border border-gray-300 rounded px-4">
+        </div>
+        <div class="xl:w-1/4 lg:w-1/3 md:w-1/2 px-2 mt-4 flex items-end">
+            <div class="h-12 shadow rounded w-28 add-btn flex items-center justify-center text-white cairo cursor-pointer" @click="loadData(1)">بحث</div>
+            <div class="w-3"></div>
+            <div class="h-12 shadow-lg rounded w-24 bg-gray-400 text-white cairo flex items-center justify-center cursor-pointer" @click="clearSearch()">تصفير</div>
+        </div>
+    </div>
+
+    <div v-if="loaded==200">
+        <table class="w-full mt-4">
+            <tr class="h-12 text-lg cairo font-semibold text-gray-600">
+                <td class="w-12 text-center">#</td>
+                <td>اسم المنتج</td>
+                <td>اسم المتعهد</td>
+                <td>السعر</td>
+                <td>الحالة</td>
+                <td class="rounded-l-lg">الإجراءات</td>
+            </tr>
+            <tr v-for="item in mainList" :key="item.id" class="h-24 bg-white shadow-2 rounded-lg text-base JF-Flat text-gray-500 font-medium hover:bg-gray-50">
+                <td class="w-12 text-center rounded-r-lg">{{ item.id }}</td>
+                <td>
+                    <div class="flex items-center">
+                        <img v-if="item.product && item.product.photo" :src="item.product.photo" class="w-12 h-12 object-cover rounded-lg ml-4">
+                        <span>{{ item.product ? item.product.name : 'منتج محذوف' }}</span>
+                    </div>
+                </td>
+                <td>{{ item.caterer ? item.caterer.name : 'متعهد محذوف' }}</td>
+                <td><span class="font-semibold text-green-700">{{ item.price }}</span> ريال</td>
+                <td>
+                    <span v-if="item.is_available" class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">متوفر</span>
+                    <span v-else class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm">غير متوفر</span>
+                </td>
+                <td class="h-20 flex items-center justify-center rounded-l-lg">
+                    <div class="flex items-start justify-center mx-auto">
+                        <i class="fas fa-ellipsis-v text-gray-500 text-xl w-8 flex pt-2 justify-center cursor-pointer" @click="openOptions($event)" :id="item.id"></i>
+                        <div v-if="item.id==optionId" class="py-2 px-2 w-36 bg-white rounded-lg absolute text-gray-600 text-sm cairo shadow-lg">
+                            <router-link :to="`/admin/catererproduct/${item.id}/edit`" v-show="$parent.$parent.checkPermission('EditCatererProduct')">
+                                <div class="h-8 w-auto px-2 rounded-lg hover:bg-gray-100 flex items-center"><i class="fas fa-edit mr-2"></i> تعديل</div>
+                            </router-link>
+                            <div class="h-px border-t my-1"></div>
+                            <div v-show="$parent.$parent.checkPermission('DeleteCatererProduct')" @click="deleteItem(item.id)" class="h-8 w-auto px-2 rounded-lg hover:bg-gray-100 flex items-center text-red-500 cursor-pointer">
+                                <i class="far fa-trash-alt mr-2"></i> حذف
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <Pagination-Bar :itemTo="itemTo" :itemFrom="itemFrom" :totalRows="totalRows" :pageId="pageId" :lastPage="lastPage" :moveToNext="moveToNext" :moveToPrevius="moveToPrevius" :changePerPage="changePerPage"></Pagination-Bar>
+    </div>
+    <Empty-Box v-if="loaded==204"></Empty-Box>
+    <Bad-Request v-if="loaded==400" :reload="reload" :message="errorMessage"></Bad-Request>
+    <No-Permission v-if="loaded==403" :message="errorMessage"></No-Permission>
+    <No-Internet v-if="loaded==404" :reload="reload"></No-Internet>
+</div>

@@ -1,0 +1,157 @@
+<div class="w-auto md:p-8 p-4">
+    <!-- Inside Page -->
+    <div v-if="loaded == 200" class="w-full md:px-4 px-0 pb-8 pt-2 bg-white shadow-2 rounded-lg text-lg text-gray-600 font-medium">
+
+        <!-- Table Header -->
+        <Single-Page-Header title="إضافة متعهد تموين جديد" url="/admin/caterer/" urlLabel="قائمة متعهدي التموين"></Single-Page-Header>
+        <!-- End Table Header -->
+
+        <!-- Grid Form -->
+        <div class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-x-4 mt-8">
+
+            <!-- =================== البيانات الأساسية =================== -->
+            <div class="lg:col-span-3 md:col-span-2 sm:col-span-1 text-xl cairo font-semibold border-b pb-2 mb-2">
+                البيانات الأساسية
+            </div>
+
+            <!-- اسم التشاركية -->
+            <div class='w-full px-2 py-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>الاسم التجاري <span class="text-red-500 mr-1">*</span></label>
+                <input type='text' v-model='formData.name' placeholder="مثال: تموينات الأصيل" class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+            </div>
+
+            <!-- المدينة -->
+            <div class='w-full px-2 py-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>المدينة <span class="text-red-500 mr-1">*</span></label>
+                <select v-model="formData.city_id" class="h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base">
+                    <option :value="null" disabled>-- اختر مدينة --</option>
+                    <option v-for="city in cityList" :key="city.id" :value="city.id">{{ city.name }}</option>
+                </select>
+            </div>
+
+            <!-- الوصف -->
+            <div class='w-full px-2 py-2 lg:col-span-3 md:col-span-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>نبذة تعريفية (الوصف)</label>
+                <textarea v-model='formData.description' placeholder="اكتب نبذة عن الخدمات التي يقدمها متعهد التموين..." class='min-h-[100px] py-2 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'></textarea>
+            </div>
+
+            <!-- =================== بيانات التواصل والموقع =================== -->
+            <div class="lg:col-span-3 md:col-span-2 sm:col-span-1 text-xl cairo font-semibold border-b pb-2 mt-8 mb-2">
+                بيانات التواصل والموقع
+            </div>
+
+            <div class='w-full px-2 py-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>العنوان التفصيلي</label>
+                <input type='text' v-model='formData.address' class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+            </div>
+            <div class='w-full px-2 py-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>رقم الهاتف</label>
+                <input type='text' v-model='formData.phone' class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+            </div>
+            <div class='w-full px-2 py-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>رقم واتساب</label>
+                <input type='text' v-model='formData.whatsapp' class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+            </div>
+            <div class='w-full px-2 py-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>خط العرض (Latitude)</label>
+                <input type='text' v-model='formData.latitude' class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+            </div>
+            <div class='w-full px-2 py-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>خط الطول (Longitude)</label>
+                <input type='text' v-model='formData.longitude' class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+            </div>
+
+            <!-- =================== سياسات الحجز والعمل =================== -->
+            <div class="lg:col-span-3 md:col-span-2 sm:col-span-1 text-xl cairo font-semibold border-b pb-2 mt-8 mb-2">
+                سياسات الحجز والعمل
+            </div>
+
+            <div class='w-full px-2 py-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>أقل مدة للحجز (يوم)</label>
+                <input type='number' v-model='formData.min_booking_days_before' class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+            </div>
+            <div class='w-full px-2 py-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>الحد الأدنى لقيمة الطلب</label>
+                <input type='number' v-model='formData.min_order_value' class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+            </div>
+            <div class='w-full px-2 py-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>نسبة العربون (%)</label>
+                <input type='number' v-model='formData.deposit_percentage' class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+            </div>
+            <div class='w-full px-2 py-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>أقل عدد ضيوف</label>
+                <input type='number' v-model='formData.min_guests' class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+            </div>
+            <div class='w-full px-2 py-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>أقصى عدد ضيوف</label>
+                <input type='number' v-model='formData.max_guests' class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+            </div>
+            <div class='w-full px-2 py-2 lg:col-span-3 md:col-span-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>سياسة إلغاء الحجز</label>
+                <textarea v-model='formData.cancellation_policy' class='min-h-[100px] py-2 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'></textarea>
+            </div>
+
+            <!-- =================== سياسات التذوق =================== -->
+            <div class="lg:col-span-3 md:col-span-2 sm:col-span-1 text-xl cairo font-semibold border-b pb-2 mt-8 mb-2">
+                سياسات التذوق
+            </div>
+
+            <div class="lg:col-span-3 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6 px-2 py-4">
+                <label for="offers_tasting_sessions" class="flex items-center justify-between cursor-pointer">
+                    <span class="text-base text-gray-700">هل تقدم جلسات تذوق بشكل عام؟</span>
+                    <div class="relative">
+                        <input type="checkbox" id="offers_tasting_sessions" class="sr-only" v-model="formData.offers_tasting_sessions">
+                        <div class="block w-14 h-8 rounded-full" :class="formData.offers_tasting_sessions ? 'bg-green-500' : 'bg-gray-300'"></div>
+                        <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-300 ease-in-out" :class="{ 'translate-x-6': formData.offers_tasting_sessions }"></div>
+                    </div>
+                </label>
+                <label for="offers_tasting_booking" class="flex items-center justify-between cursor-pointer">
+                    <span class="text-base text-gray-700">هل تتيح حجز تذوق عبر التطبيق؟</span>
+                    <div class="relative">
+                        <input type="checkbox" id="offers_tasting_booking" class="sr-only" v-model="formData.offers_tasting_booking">
+                        <div class="block w-14 h-8 rounded-full" :class="formData.offers_tasting_booking ? 'bg-green-500' : 'bg-gray-300'"></div>
+                        <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-300 ease-in-out" :class="{ 'translate-x-6': formData.offers_tasting_booking }"></div>
+                    </div>
+                </label>
+            </div>
+            <div class='w-full px-2 py-2 lg:col-span-3 md:col-span-2'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>شرح سياسة التذوق</label>
+                <textarea v-model='formData.tasting_policy' class='min-h-[100px] py-2 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'></textarea>
+            </div>
+
+            <!-- =================== الصور =================== -->
+            <div class="lg:col-span-3 md:col-span-2 sm:col-span-1 text-xl cairo font-semibold border-b pb-2 mt-8 mb-2">
+                الصور (اختياري)
+            </div>
+
+            <div class='w-full px-2 py-4'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>الشعار (Logo)</label>
+                <input type="file" @change="onChangeLogo" accept="image/*" ref="logoInput" class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+                <div v-if="previewLogo" class="mt-4">
+                    <p class="text-sm mb-2">المعايـنة:</p>
+                    <img :src="previewLogo" class="w-40 h-40 object-contain rounded border p-1" />
+                </div>
+            </div>
+            <div class='w-full px-2 py-4'>
+                <label class='block h-9 flex items-center text-gray-500 mr-2 text-sm'>صورة الغلاف</label>
+                <input type="file" @change="onChangeCover" accept="image/*" ref="coverInput" class='h-12 w-full rounded border border-gray-200 bg-gray-50 px-4 text-base'>
+                <div v-if="previewCover" class="mt-4">
+                    <p class="text-sm mb-2">المعايـنة:</p>
+                    <img :src="previewCover" class="w-64 h-40 object-cover rounded border p-1" />
+                </div>
+            </div>
+
+        </div>
+        <!-- End Grid Form -->
+
+        <!-- Action Part -->
+        <div class="flex items-center h-20 mt-6">
+            <Btn-Submit-New-Item label="إضافة متعهد التموين" :submit="addNewCaterer"></Btn-Submit-New-Item>
+        </div>
+    </div>
+
+    <Empty-Box v-if="loaded == 204" message="لم نتمكن من جلب البيانات اللازمة (مثل المدن)"></Empty-Box>
+    <Bad-Request v-if="loaded==400" :reload="reload" :message="errorMessage"></Bad-Request>
+    <No-Permission v-if="loaded==403" :message="errorMessage"></No-Permission>
+    <No-Internet v-if="loaded==404" :reload="reload"></No-Internet>
+</div>
